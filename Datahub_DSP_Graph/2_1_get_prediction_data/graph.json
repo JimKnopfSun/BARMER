@@ -1,0 +1,234 @@
+{
+    "properties": {},
+    "description": "Data from HANA to Hadoop",
+    "processes": {
+        "hanatableconsumer1": {
+            "component": "com.sap.dh.ds.hanaodbc.table.consumer",
+            "metadata": {
+                "label": "HANA Table Consumer",
+                "x": 29,
+                "y": 40,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "config": {
+                    "hanaConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "hana_isr",
+                        "connectionProperties": {}
+                    },
+                    "adapted_dataset": {
+                        "remoteObjectReference": {
+                            "connection": {
+                                "id": "hana_isr",
+                                "type": "HANA_DB"
+                            },
+                            "name": "ISR_TBR_DSP_DATA",
+                            "remoteObjectType": "TABLE",
+                            "qualifiedName": "/TBR/ISR_TBR_DSP_DATA",
+                            "nativeQualifiedName": "\"TBR\".\"ISR_TBR_DSP_DATA\"",
+                            "owner": "TBR",
+                            "version": {
+                                "dataLastModified": 1571920888244,
+                                "metadataVersionNumber": 2
+                            }
+                        },
+                        "schema": {
+                            "genericType": "TABLE",
+                            "tableBasedRepresentation": {
+                                "attributes": [
+                                    {
+                                        "name": "INDEX",
+                                        "datatype": "INTEGER",
+                                        "length": 8,
+                                        "nativeDatatype": "BIGINT"
+                                    },
+                                    {
+                                        "name": "0",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "1",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "2",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "3",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "4",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "5",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "6",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "7",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "8",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "9",
+                                        "datatype": "FLOATING",
+                                        "length": 8,
+                                        "nativeDatatype": "DOUBLE"
+                                    },
+                                    {
+                                        "name": "Y",
+                                        "datatype": "INTEGER",
+                                        "length": 8,
+                                        "nativeDatatype": "BIGINT"
+                                    }
+                                ]
+                            }
+                        },
+                        "capabilities": {
+                            "isProfileable": true
+                        },
+                        "capabilityProperties": [
+                            {
+                                "name": "isProfileable",
+                                "value": "true"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "flowagentfileproducer1": {
+            "component": "com.sap.dh.ds.storage.producer",
+            "metadata": {
+                "label": "Flowagent File Producer",
+                "x": 293.9999990463257,
+                "y": 40,
+                "height": 80,
+                "width": 120,
+                "extensible": false,
+                "config": {
+                    "service": "hdfs",
+                    "additionalProperties_csv": {
+                        "columnDelimiter": ",",
+                        "csvHeaderIncluded": true,
+                        "escapeCharacter": "\"",
+                        "nullReplacement": "",
+                        "rowDelimiter": "Windows-NewLine",
+                        "textDelimiter": "\""
+                    },
+                    "hdfsConnection": {
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "hap_hdfs",
+                        "connectionProperties": {}
+                    },
+                    "additionalProperties_hdfs": {
+                        "compressionType": "none",
+                        "replicationFactor": 1,
+                        "retryCount": 10,
+                        "threads": 1,
+                        "uploadSize": 5
+                    },
+                    "targetObjectName": "/tmp/tbr/DSP/ISR_TBR_DSP_DATA.csv"
+                }
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 558.9999980926514,
+                "y": 40,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        }
+    },
+    "groups": [
+        {
+            "name": "group1",
+            "nodes": [
+                "hanatableconsumer1"
+            ],
+            "metadata": {
+                "description": "Collect Prediction Data"
+            }
+        },
+        {
+            "name": "group2",
+            "nodes": [
+                "flowagentfileproducer1"
+            ],
+            "metadata": {
+                "description": "Store on HDFS"
+            }
+        },
+        {
+            "name": "group3",
+            "nodes": [
+                "graphterminator1"
+            ],
+            "metadata": {
+                "description": "End Process"
+            }
+        }
+    ],
+    "connections": [
+        {
+            "metadata": {
+                "points": "153,71 180.99999952316284,71 180.99999952316284,80 288.9999990463257,80"
+            },
+            "src": {
+                "port": "outConfig",
+                "process": "hanatableconsumer1"
+            },
+            "tgt": {
+                "port": "inConfig",
+                "process": "flowagentfileproducer1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "417.9999990463257,62 445.9999985694885,62 445.9999985694885,80 553.9999980926514,80"
+            },
+            "src": {
+                "port": "outFileName",
+                "process": "flowagentfileproducer1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {}
+}

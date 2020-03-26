@@ -1,0 +1,71 @@
+{
+    "properties": {},
+    "description": "",
+    "processes": {
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 303,
+                "y": 156,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "subengines": [
+                    "com.sap.python36"
+                ],
+                "config": {
+                    "script": "### Import Libraries\nimport papermill as pm\n\n\n### Execute a Notebook\n\ninput_path = \"/vrep/vflow/tmp/DSP/Iris.ipynb\"\noutput_path = \"/vrep/vflow/tmp/DSP/Iris_executed.ipynb\"\n\n_ = pm.execute_notebook(input_path, output_path)\n                            \n                            \n### send output for shutdown\napi.send(\"out\", \"end process\")"
+                },
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 580,
+                "y": 156,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        }
+    },
+    "groups": [
+        {
+            "name": "group1",
+            "nodes": [
+                "python3operator1"
+            ],
+            "metadata": {
+                "description": "Group"
+            },
+            "tags": {
+                "isr_tbr_conda": ""
+            }
+        }
+    ],
+    "connections": [
+        {
+            "metadata": {
+                "points": "427,196 575,196"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {}
+}

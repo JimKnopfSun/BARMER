@@ -1,0 +1,83 @@
+{
+    "properties": {},
+    "description": "make_prediction",
+    "processes": {
+        "python3operator1": {
+            "component": "com.sap.system.python3Operator",
+            "metadata": {
+                "label": "Python3 Operator",
+                "x": 29,
+                "y": 40,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "script": "### Import Libraries\nfrom git_clone import git_clone\nimport datetime\nimport os\nimport papermill as pm\n\n\n### Create Timestamp for new Folder\nnow = str(datetime.datetime.now())\n\n\n### Create new Folder for Git-Clone\ndatahub_path = \"/vrep/vflow/tmp/DSP/FROM_GIT/\" + now\nos.mkdir(datahub_path)\n\n\n### Clone a repository from Github to Datahub Filesystem\ngit_clone(  git_url=\"https://github.com/JimKnopfSun/BARMER.git\", \n            path=datahub_path)\n# FS: /files/vflow/tmp/DSP/FROM_GIT/2020-01-30 10:33:42.747468/BARMER.zip\n# OP: /vrep/vflow/tmp/...\n\n\n### Execute a Notebook\ninput_path = datahub_path + \"/BARMER/02_make_prediction.ipynb\"\noutput_path = \"/vrep/vflow/tmp/DSP/EXECUTED/02_make_prediction.ipynb\"\n\n_ = pm.execute_notebook(    input_path=input_path, \n                            output_path=output_path)\n                            \n                            \n### send output for shutdown\napi.send(\"out\", \"end process\")\n\n"
+                },
+                "additionalinports": [
+                    {
+                        "name": "input",
+                        "type": "message"
+                    }
+                ],
+                "additionaloutports": [
+                    {
+                        "name": "out",
+                        "type": "message"
+                    }
+                ]
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 238,
+                "y": 40,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        }
+    },
+    "groups": [
+        {
+            "name": "group1",
+            "nodes": [
+                "python3operator1"
+            ],
+            "metadata": {
+                "description": "Make Py Predictions"
+            },
+            "tags": {
+                "isr_tbr_app2": ""
+            }
+        },
+        {
+            "name": "group2",
+            "nodes": [
+                "graphterminator1"
+            ],
+            "metadata": {
+                "description": "End Process"
+            }
+        }
+    ],
+    "connections": [
+        {
+            "metadata": {
+                "points": "153,80 233,80"
+            },
+            "src": {
+                "port": "out",
+                "process": "python3operator1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {}
+}

@@ -1,0 +1,115 @@
+{
+    "properties": {},
+    "description": "",
+    "processes": {
+        "readfile1": {
+            "component": "com.sap.storage.read",
+            "metadata": {
+                "label": "Read File",
+                "x": 29,
+                "y": 40,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "path": "/vrep/vflow/tmp/tbr_3/train.csv"
+                }
+            }
+        },
+        "saphanaclient1": {
+            "component": "com.sap.hana.client2",
+            "metadata": {
+                "label": "SAP HANA Client",
+                "x": 349.99999809265137,
+                "y": 40,
+                "height": 80,
+                "width": 120,
+                "config": {
+                    "connection": {
+                        "connectionProperties": {
+                            "additionalHosts": [],
+                            "host": "host",
+                            "password": "",
+                            "port": 9000,
+                            "useTLS": false,
+                            "user": ""
+                        },
+                        "configurationType": "Configuration Manager",
+                        "connectionID": "hana_isr"
+                    },
+                    "initTable": "Create",
+                    "tableName": "TBR.TRAIN"
+                }
+            }
+        },
+        "graphterminator1": {
+            "component": "com.sap.util.graphTerminator",
+            "metadata": {
+                "label": "Graph Terminator",
+                "x": 558.9999980926514,
+                "y": 40,
+                "height": 80,
+                "width": 120,
+                "config": {}
+            }
+        }
+    },
+    "groups": [
+        {
+            "name": "group1",
+            "nodes": [
+                "readfile1"
+            ],
+            "metadata": {
+                "description": "Collect Predictions"
+            }
+        },
+        {
+            "name": "group2",
+            "nodes": [
+                "saphanaclient1"
+            ],
+            "metadata": {
+                "description": "Store in HANA"
+            }
+        },
+        {
+            "name": "group3",
+            "nodes": [
+                "graphterminator1"
+            ],
+            "metadata": {
+                "description": "End Process"
+            }
+        }
+    ],
+    "connections": [
+        {
+            "metadata": {
+                "points": "153,89 180.99999952316284,89 180.99999952316284,80 316.9999985694885,80 316.9999985694885,89 344.99999809265137,89"
+            },
+            "src": {
+                "port": "outFile",
+                "process": "readfile1"
+            },
+            "tgt": {
+                "port": "data",
+                "process": "saphanaclient1"
+            }
+        },
+        {
+            "metadata": {
+                "points": "473.99999809265137,80 553.9999980926514,80"
+            },
+            "src": {
+                "port": "result",
+                "process": "saphanaclient1"
+            },
+            "tgt": {
+                "port": "stop",
+                "process": "graphterminator1"
+            }
+        }
+    ],
+    "inports": {},
+    "outports": {}
+}

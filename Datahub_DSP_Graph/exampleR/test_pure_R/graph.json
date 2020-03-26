@@ -1,0 +1,38 @@
+{
+    "properties": {},
+    "description": "test R",
+    "processes": {
+        "rclient1": {
+            "component": "com.sap.system.rClient3",
+            "metadata": {
+                "label": "R Client",
+                "x": 160,
+                "y": 161,
+                "height": 80,
+                "width": 120,
+                "extensible": true,
+                "config": {
+                    "script": "library(MLmetrics)\n\nvorhersage <- c(24, 20, 15, 23, 16, 2)\nnames(vorhersage) <- c(\"CDU\", \"SPD\", \"Gruene\", \"Piraten\", \"Linke\", \"FDP\")"
+                }
+            }
+        }
+    },
+    "groups": [
+        {
+            "name": "group2",
+            "nodes": [
+                "rclient1"
+            ],
+            "metadata": {
+                "description": "Group"
+            },
+            "tags": {
+                "isr_tbr_conda": "",
+                "": ""
+            }
+        }
+    ],
+    "connections": [],
+    "inports": {},
+    "outports": {}
+}
